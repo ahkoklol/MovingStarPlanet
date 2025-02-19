@@ -7,6 +7,7 @@ import java.util.List;
 
 @ApplicationScoped
 public class SimulationService {
+
     private static final double G = 6.67430e-11; // Gravitational constant
     private List<Particle> particles = new ArrayList<>();
 
@@ -16,10 +17,12 @@ public class SimulationService {
         particles.add(new Particle(200, 100, 0, 1, 7.348e22));  // Moon
     }
 
+    // Returns the list of particles in the simulation
     public List<Particle> getParticles() {
         return particles;
     }
 
+    // Advances the simulation by a specified time step
     public void step(double dt) {
         int n = particles.size();
         double[] ax = new double[n];

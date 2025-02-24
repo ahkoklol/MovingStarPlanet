@@ -89,3 +89,5 @@ To maintain a consistent commit history, please follow the following commit mess
 ```bash
 git commit -m "feat: add gravitational force calculation"
 ```
+
+Please note that no code documentation will be provided as it is deemed "useless" by the teacher. Only tests will be performed.

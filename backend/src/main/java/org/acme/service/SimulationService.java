@@ -8,6 +8,9 @@ import org.acme.model.SimulationResult;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This service handles the physics calculations, including distances, accelerations, and updating positions and velocities.
+ */
 @ApplicationScoped
 public class SimulationService {
     private static final double G = 6.67e-6;  // Gravitational constant

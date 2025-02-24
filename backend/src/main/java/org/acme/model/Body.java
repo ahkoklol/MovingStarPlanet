@@ -1,33 +1,39 @@
 package org.acme.model;
 
 public class Body {
+    private double mass;
+    private double[] position;
+    private double[] velocity;
 
-    // Position of the particle
-    public double x, y;
+    public Body() {}
 
-    // Velocity of the particle
-    public double vx, vy;
+    public Body(double mass, double[] position, double[] velocity) {
+        this.mass = mass;
+        this.position = position;
+        this.velocity = velocity;
+    }
 
-    // Mass of the particle
-    public double mass;
+    public double getMass() {
+        return mass;
+    }
 
-    public Body(double x, double y, double vx, double vy, double mass) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
+    public void setMass(double mass) {
         this.mass = mass;
     }
 
-    // Updates the position and velocity of the particle based on acceleration.
-    public void update(double dt, double ax, double ay) {
+    public double[] getPosition() {
+        return position;
+    }
 
-        // Update velocity using acceleration
-        vx += ax * dt;
-        vy += ay * dt;
+    public void setPosition(double[] position) {
+        this.position = position;
+    }
 
-        // Update position using the updated velocity
-        x += vx * dt;
-        y += vy * dt;
+    public double[] getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(double[] velocity) {
+        this.velocity = velocity;
     }
 }

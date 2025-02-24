@@ -1,5 +1,8 @@
 package org.acme.model;
 
+/**
+ * This model class represents a body in the simulation with its mass, position, and velocity.
+ */
 public class Body {
     private double mass;
     private double[] position;

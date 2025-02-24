@@ -1,4 +1,4 @@
-package com.example.service;
+package org.acme.service;
 
 import com.example.model.Particle;
 import jakarta.enterprise.context.ApplicationScoped;

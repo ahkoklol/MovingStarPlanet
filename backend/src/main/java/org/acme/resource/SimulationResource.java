@@ -1,4 +1,4 @@
-package com.example.resource;
+package org.acme.resource;
 
 import com.example.model.Particle;
 import com.example.service.SimulationService;

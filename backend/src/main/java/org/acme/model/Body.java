@@ -1,6 +1,6 @@
-package com.example.model;
+package org.acme.model;
 
-public class Particle {
+public class Body {
 
     // Position of the particle
     public double x, y;
@@ -11,7 +11,7 @@ public class Particle {
     // Mass of the particle
     public double mass;
 
-    public Particle(double x, double y, double vx, double vy, double mass) {
+    public Body(double x, double y, double vx, double vy, double mass) {
         this.x = x;
         this.y = y;
         this.vx = vx;

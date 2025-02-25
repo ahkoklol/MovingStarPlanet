@@ -5,7 +5,6 @@ import org.acme.model.Body;
 import java.util.List;
 
 @ApplicationScoped
-@Named("gravitationalForceCalculator")
 public class GravitationalForceCalculator implements ForceCalculator {
     private static final double G = 6.67e-6;  // Gravitational constant
 

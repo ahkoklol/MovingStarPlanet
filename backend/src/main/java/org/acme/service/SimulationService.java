@@ -13,7 +13,6 @@ public class SimulationService {
     private static final double dt = 0.001;
 
     @Inject
-    @Named("gravitationalForceCalculator")
     ForceCalculator forceCalculator;  // Decoupled dependency
 
     public SimulationResult simulate(List<Body> bodies, double totalTime) {

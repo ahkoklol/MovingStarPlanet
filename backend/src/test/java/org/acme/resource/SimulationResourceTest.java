@@ -25,16 +25,11 @@ public class SimulationResourceTest {
                 .contentType(ContentType.JSON)
                 .extract().as(new TypeRef<>() {});
 
-        // Debugging: Print the response to see what the endpoint returns
-        System.out.println("Response from /api/simulation/init: " + bodies);
-
-        // Additional assertions
         assertEquals(4, bodies.size());
         assertEquals(100000, bodies.get(0).getMass());
         assertEquals(0.0, bodies.get(0).getPosition()[0]);
         assertEquals(0.0, bodies.get(0).getPosition()[1]);
     }
-
 
     @Test
     public void testSimulateEndpoint() {
@@ -58,18 +53,12 @@ public class SimulationResourceTest {
                 .body("times.size()", greaterThan(0))
                 .extract().as(SimulationResult.class);
 
-        // Debugging output for better visibility
-        System.out.println("Simulation Result: " + result);
-
-        // Additional assertions
         assertEquals(4, result.getPositions().size());
         assertEquals(4, result.getVelocities().size());
-        assertEquals(true, result.getTimes().size() > 0);
     }
 
     @Test
     public void testSimulateEndpointWithInvalidBody() {
-        // Testing with an invalid body with negative mass
         List<Body> invalidBodies = List.of(
                 new Body(-100, new double[]{0, 0}, new double[]{0, 0})
         );
@@ -80,9 +69,7 @@ public class SimulationResourceTest {
                 .body(invalidBodies)
                 .when().post("/api/simulation")
                 .then()
-                .statusCode(200)  // Ensure the application gracefully handles invalid input
-                .body("positions.size()", greaterThan(0))
-                .body("velocities.size()", greaterThan(0))
-                .body("times.size()", greaterThan(0));
+                .statusCode(400)  // Expecting 400 Bad Request
+                .body(containsString("Mass must be positive."));
     }
 }

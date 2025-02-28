@@ -6,6 +6,7 @@ import org.acme.service.SimulationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/api/simulation")
@@ -28,7 +29,20 @@ public class SimulationResource {
     }
 
     @POST
-    public SimulationResult simulate(@QueryParam("totalTime") @DefaultValue("5.0") double totalTime, List<Body> bodies) {
-        return simulationService.simulate(bodies, totalTime);
+    public Response simulate(@QueryParam("totalTime") @DefaultValue("5.0") double totalTime, List<Body> bodies) {
+        if (bodies == null || bodies.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Body list cannot be null or empty.")
+                    .build();
+        }
+
+        try {
+            SimulationResult result = simulationService.simulate(bodies, totalTime);
+            return Response.ok(result).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        }
     }
 }

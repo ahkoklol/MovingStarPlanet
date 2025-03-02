@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import * as THREE from "three";
+import React from "react";
 
 const Particle2D = ({ position, color, mass, isBlackHole }) => {
   const ref = useRef();

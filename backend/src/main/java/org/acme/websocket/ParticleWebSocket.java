@@ -37,7 +37,17 @@ public class ParticleWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("Received WebSocket message: " + message);
+        if (message.startsWith("delete:")) {
+            String[] parts = message.split(":");
+            if (parts.length == 3) {
+                double x = Double.parseDouble(parts[1]);
+                double y = Double.parseDouble(parts[2]);
+                boolean removed = particleRepository.removeParticle(new double[]{x, y});
+                if (removed) {
+                    broadcastParticles();
+                }
+            }
+        }
     }
 
     private void sendParticlesToSession(Session session) {

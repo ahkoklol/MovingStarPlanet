@@ -47,6 +47,28 @@ public class SimulationResource {
         return Response.status(Response.Status.CREATED).entity(body).build();
     }
 
+    @DELETE
+    @Path("/delete")
+    public Response deleteParticle(@QueryParam("x") double x, @QueryParam("y") double y) {
+        boolean removed = particleRepository.removeParticle(new double[]{x, y});
+        if (!removed) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Particle not found.").build();
+        }
+
+        particleWebSocket.broadcastParticles(); // Notify all clients
+        return Response.ok("Particle deleted successfully.").build();
+    }
+
+
+    @DELETE
+    @Path("/clear")
+    public Response clearAllParticles() {
+        particleRepository.clearParticles();
+        particleWebSocket.broadcastParticles(); // Notify all clients
+
+        return Response.ok("All particles cleared successfully.").build();
+    }
+
     @POST
     public Response simulate(@QueryParam("totalTime") @DefaultValue("5.0") double totalTime, List<Body> bodies) {
         if (bodies == null || bodies.isEmpty()) {

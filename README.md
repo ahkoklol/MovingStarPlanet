@@ -1,8 +1,8 @@
-# MovingStarPlanet
+# Simulation N-Orbeez
 
 ## Overview
 
-**MovingStarPlanet** is an **N-Body Simulation** designed to predict the individual motions of celestial objects interacting gravitationally. This project aims to simulate the complex dynamics of bodies under mutual gravitational attraction, providing a visual and computational representation of orbital mechanics.
+**Simulation N-Orbeez** is an **N-Body Simulation** designed to predict the individual motions of celestial objects interacting gravitationally. This project aims to simulate the complex dynamics of bodies under mutual gravitational attraction, providing a visual and computational representation of orbital mechanics.
 
 ## What is the N-Body Problem?
 

@@ -303,11 +303,11 @@ const SimulationCanvas2D = () => {
   return (
     <>
     
-    <h1 className="h1-press-start-2p">Simulation N-Body</h1>
+    <h1 className="h1-press-start-2p">Simulation N-Orbeez dans un évier</h1>
 
 
 
-      <div className="particle-counter">NOMBRE DE PARTICULES : {bodies.length}</div>
+      <div className="particle-counter">NOMBRE D'ORBEEZ' : {bodies.length}</div>
 
       <div className="button-container">
         <button className="add-particle-btn" onClick={() => addParticles(1)}>+1</button>
@@ -326,9 +326,9 @@ const SimulationCanvas2D = () => {
         <div className="description-container">
           <p>
             Ce projet est une simulation interactive N-Body en 2D, développée avec React Three Fiber et un backend en Java avec Gradle.
-            Les particules évoluent sous l'effet de la gravité, rebondissent entre elles et sur les bords du canvas, tout en étant attirées 
-            par un trou noir central, qui peut être ajouté dynamiquement. L'utilisateur peut ajouter des particules, contrôler la vitesse,
-            mettre en pause la simulation et nettoyer le canvas. Le backend fournit des données initiales via une API, permettant d'étendre 
+            Les particules repréesntent des Orbeez, qui rebondissent entre elles et sur les bords d'un évier'. Si l'on veut s'en débarasser, on ouvre l'embouchure de l'évier en tirant le bouchon,
+            et sont aspirés par un trou noir central qui représente le siphon. L'utilisateur peut ajouter des Orbeez, contrôler la vitesse,
+            mettre en pause la simulation et nettoyer l'évier'. Le backend fournit des données initiales via une API, permettant d'étendre
             la simulation avec des fonctionnalités avancées comme la persistance des données.
           </p>
           <p>
@@ -351,7 +351,7 @@ const SimulationCanvas2D = () => {
 
       <div className="center-particle-button">
         <button className="add-central-particle-btn" onClick={addCentralParticle}>
-          AJOUTER UN TROU NOIR
+          RETIRER LE BOUCHON
         </button>
       </div>
 

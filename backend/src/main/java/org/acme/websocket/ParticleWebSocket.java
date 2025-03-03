@@ -9,6 +9,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import org.acme.model.Body;
 import org.acme.repository.ParticleRepository;
 import jakarta.inject.Inject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -23,6 +24,7 @@ public class ParticleWebSocket {
     ParticleRepository particleRepository;
 
     private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -52,20 +54,21 @@ public class ParticleWebSocket {
 
     private void sendParticlesToSession(Session session) {
         try {
-            session.getBasicRemote().sendText(particleRepository.getAllParticles().toString());
+            String json = objectMapper.writeValueAsString(particleRepository.getAllParticles());
+            session.getBasicRemote().sendText(json);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void broadcastParticles() {
-        String particlesJson = particleRepository.getAllParticles().toString();
-        for (Session session : sessions) {
-            try {
-                session.getBasicRemote().sendText(particlesJson);
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            String json = objectMapper.writeValueAsString(particleRepository.getAllParticles());
+            for (Session session : sessions) {
+                session.getBasicRemote().sendText(json);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

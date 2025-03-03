@@ -24,5 +24,4 @@ const Particle2D = ({ position, color, mass, isBlackHole }) => {
   );
 };
 
-
 export default Particle2D;

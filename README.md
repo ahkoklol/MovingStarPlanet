@@ -2,7 +2,11 @@
 
 ## Overview
 
-**Simulation N-Orbeez** is an **N-Body Simulation** designed to predict the individual motions of celestial objects interacting gravitationally. This project aims to simulate the complex dynamics of bodies under mutual gravitational attraction, providing a visual and computational representation of orbital mechanics.
+**Simulation N-Orbeez** is an **N-Body Simulation** designed to simulate the individual motions of celestial objects interacting gravitationally. This project aims to simulate the complex dynamics of bodies. 
+
+Orbeez are expandable water toys are novelty items made from a superabsorbent polymer. They are toys that expand after putting them into water for anything from a few hours up to several days, depending on size. They shrink in saltwater or when exposed to air.
+
+In this project, orbeez are put in a sink and move. When striking another orbeez, they clash and repels back. Their speed can be modified to simulate the effect of wind or friction for instance. Finally we can destroy all orbeez present in the simulation by opening the sink hole (representing a black hole).
 
 ## What is the N-Body Problem?
 

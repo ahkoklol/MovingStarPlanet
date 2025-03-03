@@ -1,12 +1,12 @@
-import ParticulesPage from "./ParticulesPage";
-import NBodySimulation from "./NBodySimulation";
+import React from "react";
+import SimulationCanvas2D from "./components/SimulationCanvas2D";
 
-function App() {
+const App = () => {
   return (
     <div>
-      <NBodySimulation/>
+      <SimulationCanvas2D />
     </div>
   );
-}
+};
 
 export default App;

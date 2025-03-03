@@ -11,18 +11,21 @@ const getRandomColor = () => {
 
 // Fonction pour générer une particule avec une position, 
 // une vitesse, une masse et une couleur aléatoires
-const generateRandomParticle = (bounds) => ({
-  position: [
-    (Math.random() - 0.5) * bounds * 2, 
-    (Math.random() - 0.5) * bounds * 2
-  ],
-  velocity: [
-    (Math.random() - 0.5) * 0.5, 
-    (Math.random() - 0.5) * 0.5
-  ],
-  mass: Math.random() * 5 + 1, // Masse aléatoire entre 1 et 6
-  color: getRandomColor(),
-});
+const generateRandomParticle = (bounds) => {
+  const margin = 0.2; // Marge pour éviter d'avoir des particules aux bords exacts
+  return {  
+    position: [
+      (Math.random() * (bounds * 2 - margin * 2)) - bounds + margin, 
+      (Math.random() * (bounds * 2 - margin * 2)) - bounds + margin
+    ],
+    velocity: [
+      (Math.random() - 0.5) * 0.5, 
+      (Math.random() - 0.5) * 0.5
+    ],
+    mass: Math.random() * 5 + 1, // Masse aléatoire entre 1 et 6
+    color: getRandomColor(),
+  };
+};
 
 // Fonction de détection des collisions entre les particules
 const detectCollisions = (particles) => {
@@ -216,7 +219,10 @@ const SimulationCanvas2D = () => {
   const addParticles = async (count) => {
     const newParticles = Array.from({ length: count }, () => ({
       mass: Math.random() * 5 + 1,
-      position: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10],
+      position: [
+        (Math.random() * (simulationBounds * 2 - 0.2 * 2)) - simulationBounds + 0.2, 
+        (Math.random() * (simulationBounds * 2 - 0.2 * 2)) - simulationBounds + 0.2
+      ],      
       velocity: [(Math.random() - 0.5) * 0.5, (Math.random() - 0.5) * 0.5],
     }));
   

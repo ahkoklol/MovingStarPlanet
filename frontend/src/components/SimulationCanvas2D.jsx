@@ -184,9 +184,27 @@ const SimulationCanvas2D = () => {
   }, []);
 
   const addParticles = (count) => {
-    const newParticles = Array.from({ length: count }, () => generateRandomParticle(simulationBounds));
-    setBodies((prevBodies) => [...prevBodies, ...newParticles]);
+    // Générer de nouvelles particules
+    const newParticles = Array.from({ length: count }, () => ({
+      mass: Math.random() * 5 + 1,
+      position: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10],
+      velocity: [(Math.random() - 0.5) * 0.5, (Math.random() - 0.5) * 0.5],
+    }));
+  
+    // Envoyer toutes les particules actuelles + les nouvelles
+    fetch(`http://localhost:8080/api/simulation?totalTime=5.0`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify([...bodies, ...newParticles]), // Garder les anciennes particules et ajouter les nouvelles
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Simulation mise à jour :", data);
+        setBodies([...bodies, ...newParticles]); // Mettre à jour l'affichage
+      })
+      .catch((error) => console.error("Erreur lors de l'ajout des particules :", error));
   };
+  
 
   const increaseSpeed = () => {
     setSpeedMultiplier((prev) => Math.min(prev + 0.05, 1));

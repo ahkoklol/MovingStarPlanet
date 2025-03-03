@@ -126,6 +126,7 @@ const ParticlesSimulation = ({ particles, setParticles, bounds, speedMultiplier,
           color={body.color}
           mass={body.mass}
           isBlackHole={body.isBlackHole || false}
+          onClick={() => deleteParticle(body.position[0], body.position[1])}
         />
       ))}
     </>
@@ -171,39 +172,92 @@ const SimulationCanvas2D = () => {
   const [isPaused, setIsPaused] = useState(false);
   const simulationBounds = 4;
   const [showDescription, setShowDescription] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   // Récupération des données initiales via API
   useEffect(() => {
     axios.get("http://localhost:8080/api/simulation/init")
       .then((res) => {
-        const randomData = res.data.map(() => generateRandomParticle(simulationBounds));
-        console.log("Particules générées :", randomData);
-        setBodies(randomData);
+        setBodies(res.data); // On récupère directement les données du backend
       })
       .catch((error) => console.error("Erreur de récupération :", error));
-  }, []);
 
-  const addParticles = (count) => {
-    // Générer de nouvelles particules
+      const ws = new WebSocket("ws://localhost:8080/ws/particles");
+
+      ws.onopen = () => {
+        console.log("Connexion WebSocket établie");
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          setTimeout(() => {
+            const updatedParticles = JSON.parse(event.data);
+            setBodies(updatedParticles);
+          }, 100); // Attendre 100ms pour s'assurer que le WebSocket a tout reçu
+        } catch (error) {
+          console.error("Erreur de parsing WebSocket :", error);
+        }
+      };
+      
+
+      ws.onclose = () => {
+        console.log("Connexion WebSocket fermée");
+      };
+
+      setSocket(ws);
+
+      return () => {
+        ws.close();
+      };
+  }, []);
+  
+  
+
+  const addParticles = async (count) => {
     const newParticles = Array.from({ length: count }, () => ({
       mass: Math.random() * 5 + 1,
       position: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10],
       velocity: [(Math.random() - 0.5) * 0.5, (Math.random() - 0.5) * 0.5],
     }));
   
-    // Envoyer toutes les particules actuelles + les nouvelles
-    fetch(`http://localhost:8080/api/simulation?totalTime=5.0`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify([...bodies, ...newParticles]), // Garder les anciennes particules et ajouter les nouvelles
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Simulation mise à jour :", data);
-        setBodies([...bodies, ...newParticles]); // Mettre à jour l'affichage
-      })
-      .catch((error) => console.error("Erreur lors de l'ajout des particules :", error));
+    try {
+      // Attendre que toutes les requêtes POST soient terminées
+      await Promise.all(newParticles.map(particle =>
+        axios.post("http://localhost:8080/api/simulation/create", particle)
+      ));
+  
+      // Attendre un court instant pour permettre au backend de tout traiter
+      await new Promise((resolve) => setTimeout(resolve, 100));
+  
+      // Vérifier via une requête GET si toutes les particules ont bien été enregistrées
+      const response = await axios.get("http://localhost:8080/api/simulation/init");
+  
+      // Debugging : Vérifier si on reçoit bien toutes les particules
+      console.log("Total particules après ajout :", response.data.length);
+  
+      // Mettre à jour l'affichage avec toutes les particules reçues
+      setBodies(response.data);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout des particules :", error);
+    }
   };
+  
+  
+  
+  
+
+  const deleteParticle = (x, y) => {
+    if (socket) {
+      socket.send(`delete:${x}:${y}`);
+    }
+  };
+  
+  
+  const clearParticles = () => {
+    axios.delete("http://localhost:8080/api/simulation/clear")
+      .catch((error) => console.error("Erreur lors du nettoyage :", error));
+  };
+  
   
 
   const increaseSpeed = () => {
@@ -233,6 +287,8 @@ const SimulationCanvas2D = () => {
     });
   };
   
+  
+  
   const toggleDescription = () => {
     setShowDescription(prev => !prev);
   };
@@ -242,6 +298,8 @@ const SimulationCanvas2D = () => {
     <>
     
     <h1 className="h1-press-start-2p">Simulation N-Body</h1>
+
+
 
       <div className="particle-counter">NOMBRE DE PARTICULES : {bodies.length}</div>
 
@@ -292,7 +350,7 @@ const SimulationCanvas2D = () => {
       </div>
 
     <div className="clear-canvas-button">
-      <button className="clear-canvas-btn" onClick={() => setBodies([])}>
+      <button className="clear-canvas-btn" onClick={clearParticles}>
         NETTOYER
       </button>
     </div>
